@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 const codexPhrases = [
   { tuavah: "a dage", english: "she is the wave" },
   { tuavah: "bya nilo", english: "I am the one" },
@@ -9,6 +11,66 @@ const codexPhrases = [
   { tuavah: "igyu dageyi", english: "two waves meet" },
   { tuavah: "besi prelusy shadli", english: "the sword and the wound" },
 ]
+
+const extendedPhrases = [
+  { tuavah: "shoi ngyeheyi", english: "the moon rises" },
+  { tuavah: "sada yaloyi", english: "the sun falls" },
+  { tuavah: "lipro", english: "the water flows" },
+  { tuavah: "\u2018ura guayi", english: "the fire burns" },
+  { tuavah: "itra ouyi", english: "the wind speaks" },
+  { tuavah: "myeanyo slokayi", english: "the mountain stands" },
+  { tuavah: "edre \u2018ledyiyi", english: "the song begins" },
+  { tuavah: "ae ashiyi", english: "the dream ends" },
+  { tuavah: "ekla vreprayi", english: "the blood runs deep" },
+  { tuavah: "kuhi iiyi", english: "the mother calls" },
+  { tuavah: "losre gluviyi", english: "the child returns" },
+  { tuavah: "hai kyoeyi", english: "the river knows" },
+  { tuavah: "ugra ieyi", english: "the sky opens" },
+  { tuavah: "poblo ochoyi", english: "the circle closes" },
+  { tuavah: "\u2018oeia gyalie", english: "the ancestors watch" },
+]
+
+const dictionary = {
+  // Pronouns
+  'i': 'bya', 'me': 'bya', 'she': 'a', 'he': 'a', 'it': 'a',
+  'we': "'ri", 'they': 'ola', 'you': 'tuny',
+  // Nouns
+  'wave': 'dage', 'fire': "'ura", 'light': 'trunv', 'dark': 'epa',
+  'goddess': 'kree', 'one': 'nilo', 'name': 'slese', 'temple': 'blubyo',
+  'bone': "'ye", 'sword': 'besi', 'wound': 'shadli', 'moon': 'shoi',
+  'sun': 'sada', 'water': 'lipro', 'star': 'kisru', 'stars': 'kisrua',
+  'earth': 'mugi', 'wind': 'itra', 'mountain': 'myeanyo', 'song': 'edre',
+  'dream': 'ae', 'blood': 'ekla', 'mother': 'kuhi', 'child': 'losre',
+  'river': 'hai', 'sky': 'ugra', 'circle': 'poblo', 'stone': "'losri",
+  'spirit': 'tlotla', 'veil': 'vuzya', 'heart': 'zligla', 'love': 'pliro',
+  'body': 'odye', 'truth': "u'yo", 'ancestor': "'oeia", 'ancestors': "'oeia",
+  // Verbs
+  'see': 'odo', 'sees': 'odoyi', 'speak': 'ou', 'speaks': 'ouyi',
+  'rise': 'ngyehe', 'rises': 'ngyeheyi', 'fall': 'yalo', 'falls': 'yaloyi',
+  'burn': 'gua', 'burns': 'guayi', 'stand': 'sloka', 'stands': 'slokayi',
+  'begin': "'ledyi", 'begins': "'ledyiyi", 'end': 'ashi', 'ends': 'ashiyi',
+  'return': 'gluvi', 'returns': 'gluviyi', 'know': 'kyoe', 'knows': 'kyoeyi',
+  'open': 'ie', 'opens': 'ieyi', 'close': 'ocho', 'closes': 'ochoyi',
+  'call': 'ii', 'calls': 'iiyi', 'watch': 'gyali', 'remember': 'tuavah',
+  'dance': "'yao", 'walk': 'laa', 'walks': 'laayi', 'give': 'trih',
+  // Modifiers
+  'the': '', 'a': '', 'is': '', 'are': '', 'in': '', 'of': '', 'to': '',
+  'and': 'epa', 'two': 'igyu', 'deep': 'vrepra',
+}
+
+function translateToTuavah(input) {
+  if (!input.trim()) return ''
+  return input
+    .toLowerCase()
+    .split(/\s+/)
+    .map(word => {
+      const clean = word.replace(/[^a-z']/g, '')
+      if (clean in dictionary) return dictionary[clean]
+      return clean
+    })
+    .filter(w => w.length > 0)
+    .join(' ')
+}
 
 const consonants = [
   { symbol: "p", place: "Bilabial", manner: "Stop" },
@@ -121,6 +183,23 @@ function Lore() {
   )
 }
 
+function PhraseRow({ phrase, i }) {
+  return (
+    <div
+      key={i}
+      className="group flex flex-col sm:flex-row sm:items-baseline border-t border-gold-muted/20 py-5 px-4 hover:bg-parchment-light/60 transition-colors duration-300"
+    >
+      <span className="font-heading italic text-lg md:text-xl text-violet flex-1"
+            style={{ fontVariationSettings: "'WONK' 1, 'SOFT' 80" }}>
+        {phrase.tuavah}
+      </span>
+      <span className="text-ink-light text-sm md:text-base sm:text-right">
+        {phrase.english}
+      </span>
+    </div>
+  )
+}
+
 function Codex() {
   return (
     <section className="py-20 px-6">
@@ -132,20 +211,65 @@ function Codex() {
 
       <div className="max-w-3xl mx-auto grid gap-0">
         {codexPhrases.map((phrase, i) => (
-          <div
-            key={i}
-            className="group flex flex-col sm:flex-row sm:items-baseline border-t border-gold-muted/20 py-5 px-4 hover:bg-parchment-light/60 transition-colors duration-300"
-          >
-            <span className="font-heading italic text-lg md:text-xl text-violet flex-1"
-                  style={{ fontVariationSettings: "'WONK' 1, 'SOFT' 80" }}>
-              {phrase.tuavah}
-            </span>
-            <span className="text-ink-light text-sm md:text-base sm:text-right">
-              {phrase.english}
-            </span>
-          </div>
+          <PhraseRow key={i} phrase={phrase} i={i} />
         ))}
         <div className="border-t border-gold-muted/20" />
+      </div>
+
+      {/* Extended Lexicon */}
+      <div className="max-w-3xl mx-auto mt-16">
+        <div className="flex items-center justify-center gap-4 mb-12">
+          <div className="h-px w-12 bg-gold-muted/30" />
+          <p className="text-center text-ink-light text-sm tracking-[0.2em] uppercase">Extended Lexicon</p>
+          <div className="h-px w-12 bg-gold-muted/30" />
+        </div>
+
+        <div className="grid gap-0">
+          {extendedPhrases.map((phrase, i) => (
+            <PhraseRow key={i} phrase={phrase} i={i} />
+          ))}
+          <div className="border-t border-gold-muted/20" />
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function Oracle() {
+  const [input, setInput] = useState('')
+  const translation = translateToTuavah(input)
+
+  return (
+    <section className="max-w-2xl mx-auto px-6 py-20">
+      <h2 className="font-heading text-3xl md:text-4xl text-violet-deep mb-4 text-center"
+          style={{ fontVariationSettings: "'WONK' 1, 'SOFT' 80", fontWeight: 400 }}>
+        The Oracle
+      </h2>
+      <p className="text-center text-ink-light text-sm tracking-[0.2em] uppercase mb-16">Speak to the Tongue</p>
+
+      <div className="max-w-xl mx-auto">
+        <input
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="type in English to hear the tongue..."
+          className="w-full bg-transparent border-0 border-b-2 border-gold-muted/40 px-2 py-3 text-base text-ink font-mono outline-none placeholder:text-ink-light/40 focus:border-violet transition-colors duration-300"
+          style={{ fontFamily: "var(--font-mono)" }}
+        />
+
+        <div
+          className="mt-6 min-h-[3rem] flex items-center justify-center transition-opacity duration-500"
+          style={{ opacity: translation ? 1 : 0 }}
+        >
+          <p className="font-heading italic text-xl md:text-2xl text-violet-deep text-center leading-relaxed"
+             style={{ fontVariationSettings: "'WONK' 1, 'SOFT' 80" }}>
+            {translation || '\u00A0'}
+          </p>
+        </div>
+
+        <p className="text-center text-ink-light/40 text-xs mt-8 tracking-wide">
+          word-by-word translation &mdash; grammar may differ from true Tuavah
+        </p>
       </div>
     </section>
   )
@@ -337,6 +461,8 @@ function App() {
       <Lore />
       <Divider />
       <Codex />
+      <Divider />
+      <Oracle />
       <Divider />
       <Phonology />
       <Divider />
