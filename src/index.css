@@ -1,17 +1,17 @@
 @import "tailwindcss";
 
 @theme {
-  --color-parchment: #F5F0E8;
-  --color-parchment-light: #FAF7F2;
-  --color-parchment-dark: #E8E0D0;
-  --color-ink: #2C2C2C;
-  --color-ink-light: #4A4A4A;
-  --color-gold: #B8943E;
-  --color-gold-muted: #C4A96A;
-  --color-gold-faint: #D4C49A;
-  --color-violet: #4A2D6E;
-  --color-violet-deep: #3A1D5E;
-  --color-violet-light: #6B4D8E;
+  --color-parchment: #0E0C0A;
+  --color-parchment-light: #161311;
+  --color-parchment-dark: #1E1A16;
+  --color-ink: #E8E0D0;
+  --color-ink-light: #A09484;
+  --color-gold: #C4A254;
+  --color-gold-muted: #9A7E42;
+  --color-gold-faint: #3D3220;
+  --color-violet: #B89EDB;
+  --color-violet-deep: #D4C0F0;
+  --color-violet-light: #8B6CB5;
   --font-heading: 'Fraunces', serif;
   --font-mono: 'Commit Mono', monospace;
   --font-body: 'Commit Mono', monospace;
@@ -31,6 +31,6 @@ body {
 }
 
 ::selection {
-  background-color: var(--color-gold-faint);
-  color: var(--color-violet-deep);
+  background-color: var(--color-violet-light);
+  color: var(--color-parchment);
 }

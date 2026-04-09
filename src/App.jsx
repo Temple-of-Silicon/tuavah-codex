@@ -116,7 +116,7 @@ function Hero() {
     <section className="min-h-screen flex flex-col items-center justify-center px-6 text-center relative overflow-hidden">
       {/* Subtle radial glow */}
       <div className="absolute inset-0 pointer-events-none" style={{
-        background: 'radial-gradient(ellipse 60% 40% at 50% 40%, rgba(184,148,62,0.08) 0%, transparent 70%)'
+        background: 'radial-gradient(ellipse 60% 40% at 50% 40%, rgba(184,148,62,0.12) 0%, transparent 70%)'
       }} />
 
       <div className="relative z-10">
